@@ -102,8 +102,8 @@ public class ChatGptServiceImpl implements ChatGptService {
             messageJsonArray.add(message);
 */
             String chatGptResponse = chatGptDao.generateResponseFromMessagesInString(messageJsonArray);
-            chatGptResponse = chatGptResponse.replaceAll("^\"|\"$", "");
-            logger.info("Message received from chat: " + chatGptResponse);
+            chatGptResponse = sanitizeResponse(chatGptResponse);
+            logger.info("Message received from chat after processing: " + chatGptResponse);
             // role has option system, user, or assistant.
             message = new JsonObject();
             message.addProperty(ROLE, "assistant");
@@ -120,6 +120,21 @@ public class ChatGptServiceImpl implements ChatGptService {
 
 
         return generatedStrings;
+    }
+
+    /**
+     * Parsing response before storing in chat history and returning to controller
+     * @param chatGptResponse unparsed response
+     * @return parsed response
+     */
+    private String sanitizeResponse(String chatGptResponse) {
+        // removing surrounding quotes if they exist
+        chatGptResponse = chatGptResponse.replaceAll("^\"|\"$", "");
+
+        // replace \\ with \n
+        chatGptResponse = chatGptResponse.replaceAll("\\\n", "");
+        chatGptResponse = chatGptResponse.replaceAll("\\\r", "");
+        return chatGptResponse;
     }
 
     private static String getChatGptMessageFromContent(String prompt, String content) {
