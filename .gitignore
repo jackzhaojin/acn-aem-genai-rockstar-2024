@@ -1,5 +1,13 @@
 # Created by https://www.gitignore.io/api/eclipse,java,maven
 
+# Custom
+.repo
+.run
+docker*/*.jar
+docker*/*.zip
+docker*/*.tar
+docker*/installs
+
 ### Eclipse ###
 *.pydevproject
 .metadata
@@ -59,6 +67,8 @@ local.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# Mac OS #
+.DS_Store
 
 ### Maven ###
 target/
