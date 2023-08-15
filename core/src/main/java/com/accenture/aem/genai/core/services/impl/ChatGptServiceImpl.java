@@ -132,8 +132,8 @@ public class ChatGptServiceImpl implements ChatGptService {
         chatGptResponse = chatGptResponse.replaceAll("^\"|\"$", "");
 
         // replace \\ with \n
-        chatGptResponse = chatGptResponse.replaceAll("\\\n", "");
-        chatGptResponse = chatGptResponse.replaceAll("\\\r", "");
+        chatGptResponse = chatGptResponse.replaceAll("\\\\n", "");
+        chatGptResponse = chatGptResponse.replaceAll("\\\\r", "");
         return chatGptResponse;
     }
 
