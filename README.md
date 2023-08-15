@@ -1,7 +1,10 @@
-# Sample AEM project template
+# Accenture AEM Gen AI Accelerator
 
-This is a project template for AEM-based applications. It is intended as a best-practice set of examples as well as a potential starting point to develop your own functionality.
+## How to use
+* On your project's xfpage's sling:resourceSuperType, update from cq/experience-fragments/components/xfpage to acngenai/components/xfpage
+* Merge in core and ui.apps into separate modules or the same module
 
+Note - future enhancements should be made so this is a separate embeddable module hosted publically.
 ## Modules
 
 The main parts of the template are:
