@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/acngenai" mode="merge"/>
+    <filter root="/content/acngenai" mode="merge"/>
+    <filter root="/content/dam/acngenai" mode="merge">
+        <exclude pattern="/content/dam/acngenai(/.*)?"/>
+        <include pattern="/content/dam/acngenai/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/acngenai/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/acngenai" mode="merge"/>
+</workspaceFilter>
