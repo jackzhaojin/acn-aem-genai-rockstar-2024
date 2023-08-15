@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          jcr:primaryType="cq:Page">
+    <tabs jcr:primaryType="nt:unstructured">
+        <gpt
+                cq:showOnCreate="{Boolean}false"
+                granite:class="gpt-tab"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="GPT 3.5"
+                maximized="{Boolean}true"
+                sling:resourceType="granite/ui/components/coral/foundation/container">
+                    <items jcr:primaryType="nt:unstructured">
+                        <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container"
+                                class="gpt-container2">
+                            <items jcr:primaryType="nt:unstructured">
+                                <title
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Chat GPT"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <title
+                                                cq:showOnCreate="{Boolean}false"
+                                                jcr:primaryType="nt:unstructured"
+                                                granite:class="cpt-prompt-input"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldLabel="Chat Prompt"/>
+                                        <continueChat
+                                                jcr:primaryType="nt:unstructured"
+                                                granite:class="cpt-continue-chat"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="If checked we'll continue our previous chat. If unchecked we'll start a new chat"
+                                                name="./cq:xfShowInEditor"
+                                                text="Continue Chat"
+                                                value="false"/>
+                                        <generate
+                                                granite:class="cpt-generate-content"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/button"
+                                                text="Generate Content">
+                                            <parentConfig
+                                                    jcr:primaryType="nt:unstructured"
+                                                    close="{Boolean}true"/>
+                                        </generate>
+                                        <chatTable
+                                                granite:class="cpt-chat-table"
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Chat Table"
+                                                sling:resourceType="granite/ui/components/coral/foundation/table"
+                                                orderable="{Boolean}false">
+                                            <columns jcr:primaryType="nt:unstructured">
+                                                <contentProperty
+                                                        jcr:primaryType="nt:unstructured"
+                                                        jcr:title="Content Property"/>
+                                                <existingContent
+                                                        jcr:primaryType="nt:unstructured"
+                                                        jcr:title="Existing Content"/>
+                                                <newContent
+                                                        jcr:primaryType="nt:unstructured"
+                                                        jcr:title="New Content"/>
+                                            </columns>
+                                        </chatTable>
+                                        <variationName
+                                                granite:class="gpt-var-name"
+                                                cq:showOnCreate="{Boolean}false"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldLabel="Variation Name"/>
+                                        <create
+                                                granite:class="cpt-create-variation"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/button"
+                                                text="Create">
+                                            <parentConfig
+                                                    jcr:primaryType="nt:unstructured"
+                                                    close="{Boolean}true"/>
+                                        </create>
+                                        <charset
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                allowBulkEdit="{Boolean}true"
+                                                ignoreData="{Boolean}true"
+                                                name="_charset_"
+                                                value="utf-8"/>
+                                    </items>
+                                </title>
+                            </items>
+                        </column>
+            </items>
+        </gpt>
+    </tabs>
+</jcr:root>
