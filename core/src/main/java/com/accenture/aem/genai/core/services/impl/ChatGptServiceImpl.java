@@ -47,10 +47,10 @@ public class ChatGptServiceImpl implements ChatGptService {
     @Reference
     ChatGptDao chatGptDao;
 
-    public Map<String, String> getExfragOriginalContent(String pathToExfragVar) {
+    public Map<String, String> getExfragOriginalContent(String pathToExfragVar, ResourceResolver resourceResolver) {
 
         String[] propertiesToScan = {"text", "jcr:description"};
-        return searchProperties(pathToExfragVar);
+        return searchProperties(pathToExfragVar, resourceResolver);
     }
 
     public Map<String, String> useGptConvertStrings(String authorPrompt, Map<String,
@@ -139,16 +139,18 @@ public class ChatGptServiceImpl implements ChatGptService {
     }
 
 
-    private Map<String, String> searchProperties(String path) {
+    private Map<String, String> searchProperties(String path, ResourceResolver resourceResolver) {
         // Specify the properties you want to search for
         String[] properties = {"text", "jcr:description"};
 
         Map<String, String> returnMap = new TreeMap<>();
 
         try {
-            // Get the resource resolver using the ResourceResolverFactory
-            Map<String, Object> authInfo = Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, "my-service");
-            ResourceResolver resourceResolver = resourceResolverFactory.getAdministrativeResourceResolver(null);
+            // Get the resource resolver using the ResourceResolverFactory if resource resolver is null
+            if (resourceResolver == null) {
+                Map<String, Object> authInfo = Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, "my-service");
+                resourceResolver = resourceResolverFactory.getAdministrativeResourceResolver(null);
+            }
 
             // Get the session from the resource resolver
             Session session = resourceResolver.adaptTo(Session.class);

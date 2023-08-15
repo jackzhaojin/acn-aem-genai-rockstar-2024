@@ -83,7 +83,7 @@ public class ExfragGptServlet extends SlingSafeMethodsServlet {
         ResourceResolver resourceResolver = req.getResourceResolver();
 
 
-        Map<String, String> exfragOriginalContent = chatGptService.getExfragOriginalContent(req.getResource().getPath());
+        Map<String, String> exfragOriginalContent = chatGptService.getExfragOriginalContent(req.getResource().getPath(), req.getResourceResolver());
         JsonElement jsonOriginalTree = gson.toJsonTree(exfragOriginalContent);
         responseObject.add("originalValues", jsonOriginalTree);
 

@@ -33,7 +33,7 @@ import java.io.IOException;
 public class ChatGptDaoImpl implements ChatGptDao {
     // Configurable fields
     // encrypted per aem instance based on its hmac, for it to work everywhere we'll need to make this an osgi configuration and configure it per env
-    private static final String DEFAULT_SECRET_KEY_ENCRYPTED = "{94ed19bc7bd4a77f3319bcb90f32f0ca3672deaa2897f6c4992c4915c4c4554f670758d7bc9828d9af1dea55c25f0a1635323d79ba72f068c324734bed7af5291da6e05c584e4f4d9b1ed2dae21fef32}";
+    private static final String DEFAULT_SECRET_KEY_ENCRYPTED = "{61ca95838ad0b2e443a290633d040401a3862d526d43a2d74491e92afea9ce3bc46119e062af9c0d4ba1a0c42127966074e96a305e33f75f0391f5b3c280fbf1c480aae0ebd8d15a36b6a3cf51d1a6a9}";
     //    private static final String API_ENDPOINT = "https://api.openai.com/v1/completions";
     private static final String API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     //    private static final String API_ENDPOINT = "https://api.openai.com/v1/engines/davinci-codex/completions";
