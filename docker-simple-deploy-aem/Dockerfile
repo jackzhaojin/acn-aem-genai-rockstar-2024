@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11 AS build
+FROM eclipse-temurin:11.0.19_7-jdk
 LABEL authors="jack.jin"
 
 # working dir setup
