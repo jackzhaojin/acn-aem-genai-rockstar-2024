@@ -36,7 +36,7 @@ public class ChatGptDaoImpl implements ChatGptDao {
     // encrypted per aem instance based on its hmac, for it to work everywhere we'll need to make this an osgi configuration and configure it per env
     private static final String DEFAULT_SECRET_KEY_ENCRYPTED = "{61ca95838ad0b2e443a290633d040401a3862d526d43a2d74491e92afea9ce3bc46119e062af9c0d4ba1a0c42127966074e96a305e33f75f0391f5b3c280fbf1c480aae0ebd8d15a36b6a3cf51d1a6a9}";
 
-    private static final String DEFAULT_CHAT_GPT_MODEL = "gpt-3.5-turbo"; // working chat
+    private static final String DEFAULT_CHAT_GPT_MODEL = "gpt-4"; // working chat
     private static final String DEFAULT_MAX_TOKENS = "1000";
 
 

@@ -4,6 +4,17 @@
 * On your project's xfpage's sling:resourceSuperType, update from cq/experience-fragments/components/xfpage to acngenai/components/xfpage
 * Merge in core and ui.apps into separate modules or the same module
 
+## Updating versions
+This can be introduced in a dev ops process later to increment with snapshot, and remove snapshot
+
+For now this process is simply executing the following
+
+```
+mvn versions:set -DnewVersion=1.0.1
+mvn versions:commit
+
+```
+
 Note - future enhancements should be made so this is a separate embeddable module hosted publically.
 ## Modules
 
