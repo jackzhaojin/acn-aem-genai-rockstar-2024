@@ -3,6 +3,7 @@ package com.accenture.aem.genai.core.dao.impl;
 import com.accenture.aem.genai.core.dao.ChatGptDao;
 import com.adobe.granite.crypto.CryptoException;
 import com.adobe.granite.crypto.CryptoSupport;
+import com.adobe.xfa.Int;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -34,12 +35,17 @@ public class ChatGptDaoImpl implements ChatGptDao {
     // Configurable fields
     // encrypted per aem instance based on its hmac, for it to work everywhere we'll need to make this an osgi configuration and configure it per env
     private static final String DEFAULT_SECRET_KEY_ENCRYPTED = "{61ca95838ad0b2e443a290633d040401a3862d526d43a2d74491e92afea9ce3bc46119e062af9c0d4ba1a0c42127966074e96a305e33f75f0391f5b3c280fbf1c480aae0ebd8d15a36b6a3cf51d1a6a9}";
+
+    private static final String DEFAULT_CHAT_GPT_MODEL = "gpt-3.5-turbo"; // working chat
+    private static final String DEFAULT_MAX_TOKENS = "1000";
+
+
     //    private static final String API_ENDPOINT = "https://api.openai.com/v1/completions";
     private static final String API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     //    private static final String API_ENDPOINT = "https://api.openai.com/v1/engines/davinci-codex/completions";
-    private static final int MAX_TOKENS = 1000;
 
-    public static final String CHAT_GPT_MODEL = "gpt-3.5-turbo"; // working chat
+
+    //    public static final String CHAT_GPT_MODEL = "gpt-3.5-turbo"; // working chat
     //    public static final String CHAT_GPT_MODEL = "text-davinci-003"; // completion
     public static final String ROLE = "role";
     public static final String CONTENT = "content";
@@ -48,6 +54,8 @@ public class ChatGptDaoImpl implements ChatGptDao {
     private CryptoSupport cryptoSupport;
 
     private String secretKey;
+    private String chatGptModel;
+    private int maxTokens;
 
 
     /**
@@ -68,11 +76,30 @@ public class ChatGptDaoImpl implements ChatGptDao {
                 required = true
         )
         String secretKey() default DEFAULT_SECRET_KEY_ENCRYPTED;
+
+        @AttributeDefinition(
+                name = "Chat GPT Model",
+                description = "Chat GPT Model. example: gpt-3.5-turbo or gpt-4",
+                type = AttributeType.STRING,
+                defaultValue = DEFAULT_CHAT_GPT_MODEL,
+                required = true
+        )
+        String chatGptModel() default DEFAULT_CHAT_GPT_MODEL;
+
+        @AttributeDefinition(
+            name = "Max Tokens",
+            description = "Max Tokens",
+            type = AttributeType.INTEGER,
+            defaultValue = DEFAULT_MAX_TOKENS,
+            required = true)
+        String maxTokens() default DEFAULT_MAX_TOKENS;
     }
 
     @Activate
     protected void activate(ChatGptDaoConfiguration config) {
         secretKey = config.secretKey();
+        chatGptModel = config.chatGptModel();
+        maxTokens = Integer.parseInt(config.maxTokens());
         if (cryptoSupport.isProtected(secretKey)) {
             try {
                 secretKey = cryptoSupport.unprotect(secretKey);
@@ -107,8 +134,8 @@ public class ChatGptDaoImpl implements ChatGptDao {
 
             // Create the request payload using Gson
             JsonObject payload = new JsonObject();
-            payload.addProperty("model", CHAT_GPT_MODEL);
-            payload.addProperty("max_tokens", MAX_TOKENS);
+            payload.addProperty("model", chatGptModel);
+            payload.addProperty("max_tokens", maxTokens);
 
             // from parameter
             payload.add("messages", messageJsonArray);
