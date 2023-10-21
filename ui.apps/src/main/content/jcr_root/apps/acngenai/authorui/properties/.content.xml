@@ -1,94 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-          xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
-          xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
-          jcr:primaryType="cq:Page">
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="cq:Page">
     <tabs jcr:primaryType="nt:unstructured">
         <gpt
-                cq:showOnCreate="{Boolean}false"
-                granite:class="gpt-tab"
-                jcr:primaryType="nt:unstructured"
-                jcr:title="AI Personalization"
-                maximized="{Boolean}true"
-                sling:resourceType="granite/ui/components/coral/foundation/container">
+            cq:showOnCreate="{Boolean}false"
+            granite:class="gpt-tab"
+            jcr:primaryType="nt:unstructured"
+            jcr:title="AI Personalization"
+            sling:resourceType="granite/ui/components/coral/foundation/container"
+            maximized="{Boolean}true">
+            <items jcr:primaryType="nt:unstructured">
+                <column
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                    class="gpt-container2">
                     <items jcr:primaryType="nt:unstructured">
-                        <column
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                class="gpt-container2">
+                        <title
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Chat GPT"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                             <items jcr:primaryType="nt:unstructured">
                                 <title
+                                    cq:showOnCreate="{Boolean}false"
+                                    granite:class="cpt-prompt-input"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldLabel="Chat Prompt"/>
+                                <continueChat
+                                    granite:class="cpt-continue-chat"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                    fieldDescription="If checked we'll continue our previous chat. If unchecked we'll start a new chat"
+                                    name="./cq:xfShowInEditor"
+                                    text="Continue Chat"
+                                    value="false"/>
+                                <generate
+                                    granite:class="cpt-generate-content"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/button"
+                                    text="Generate Content">
+                                    <parentConfig
                                         jcr:primaryType="nt:unstructured"
-                                        jcr:title="Chat GPT"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        close="{Boolean}true"/>
+                                </generate>
+                                <chatTable
+                                    granite:class="cpt-chat-table"
+                                    jcr:primaryType="nt:unstructured"
+                                    jcr:title="Chat Table"
+                                    sling:resourceType="granite/ui/components/coral/foundation/table"
+                                    orderable="{Boolean}false">
+                                    <columns jcr:primaryType="nt:unstructured">
+                                        <contentProperty
+                                            jcr:primaryType="nt:unstructured"
+                                            jcr:title="Content Property"/>
+                                        <existingContent
+                                            jcr:primaryType="nt:unstructured"
+                                            jcr:title="Existing Content"/>
+                                        <newContent
+                                            jcr:primaryType="nt:unstructured"
+                                            jcr:title="New Content"/>
+                                    </columns>
+                                </chatTable>
+                                <variationName
+                                    cq:showOnCreate="{Boolean}false"
+                                    granite:class="gpt-var-name"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldLabel="Variation Name"/>
+                                <create
+                                    granite:class="cpt-create-variation"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/button"
+                                    text="Create Variation">
+                                    <parentConfig
+                                        jcr:primaryType="nt:unstructured"
+                                        close="{Boolean}true"/>
+                                </create>
+                                <charset
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                    allowBulkEdit="{Boolean}true"
+                                    ignoreData="{Boolean}true"
+                                    name="_charset_"
+                                    value="utf-8"/>
+                                <disclaimer
+                                    granite:class="gpt-disclaimer"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/accordion"
+                                    variant="quiet">
                                     <items jcr:primaryType="nt:unstructured">
-                                        <title
-                                                cq:showOnCreate="{Boolean}false"
-                                                jcr:primaryType="nt:unstructured"
-                                                granite:class="cpt-prompt-input"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldLabel="Chat Prompt"/>
-                                        <continueChat
-                                                jcr:primaryType="nt:unstructured"
-                                                granite:class="cpt-continue-chat"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                fieldDescription="If checked we'll continue our previous chat. If unchecked we'll start a new chat"
-                                                name="./cq:xfShowInEditor"
-                                                text="Continue Chat"
-                                                value="false"/>
-                                        <generate
-                                                granite:class="cpt-generate-content"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/button"
-                                                text="Generate Content">
-                                            <parentConfig
+                                        <disclaimer
+                                            jcr:primaryType="nt:unstructured"
+                                            jcr:title="Disclaimer"
+                                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                                            maximized="{Boolean}false">
+                                            <items jcr:primaryType="nt:unstructured">
+                                                <disclaimertext
                                                     jcr:primaryType="nt:unstructured"
-                                                    close="{Boolean}true"/>
-                                        </generate>
-                                        <chatTable
-                                                granite:class="cpt-chat-table"
-                                                jcr:primaryType="nt:unstructured"
-                                                jcr:title="Chat Table"
-                                                sling:resourceType="granite/ui/components/coral/foundation/table"
-                                                orderable="{Boolean}false">
-                                            <columns jcr:primaryType="nt:unstructured">
-                                                <contentProperty
+                                                    sling:resourceType="granite/ui/components/coral/foundation/text"
+                                                    text="Platform built for Accenture's clients to accelerate their Gen AI enablement journey.
+                                                    Client is responsible for content generated by this accelerator.
+                                                    Client and team has rights to customize and extend, however kindly do not resell, repackage or redistribute."/>
+                                                <version
                                                         jcr:primaryType="nt:unstructured"
-                                                        jcr:title="Content Property"/>
-                                                <existingContent
-                                                        jcr:primaryType="nt:unstructured"
-                                                        jcr:title="Existing Content"/>
-                                                <newContent
-                                                        jcr:primaryType="nt:unstructured"
-                                                        jcr:title="New Content"/>
-                                            </columns>
-                                        </chatTable>
-                                        <variationName
-                                                granite:class="gpt-var-name"
-                                                cq:showOnCreate="{Boolean}false"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldLabel="Variation Name"/>
-                                        <create
-                                                granite:class="cpt-create-variation"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/button"
-                                                text="Create">
+                                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                                        text="Version: 1.1.0"/>
+                                            </items>
                                             <parentConfig
-                                                    jcr:primaryType="nt:unstructured"
-                                                    close="{Boolean}true"/>
-                                        </create>
-                                        <charset
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
-                                                allowBulkEdit="{Boolean}true"
-                                                ignoreData="{Boolean}true"
-                                                name="_charset_"
-                                                value="utf-8"/>
+                                                active="{Boolean}false"/>
+                                        </disclaimer>
                                     </items>
-                                </title>
+                                </disclaimer>
                             </items>
-                        </column>
+                        </title>
+                    </items>
+                </column>
             </items>
         </gpt>
     </tabs>
