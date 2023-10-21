@@ -124,7 +124,7 @@ public class ChatGptDaoImpl implements ChatGptDao {
     public JsonObject generateResponseFromMessagesInJson(JsonArray messageJsonArray) {
 
         // HTTP client instance
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpClient httpClient = getHttpClient();
         try {
             // Create an HTTP POST request with the necessary headers
             HttpPost httpPost = new HttpPost(API_ENDPOINT);
@@ -175,6 +175,11 @@ public class ChatGptDaoImpl implements ChatGptDao {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public CloseableHttpClient getHttpClient() {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        return httpClient;
     }
 
     public String generateSimpleResponse(String prompt) {

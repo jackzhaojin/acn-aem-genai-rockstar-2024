@@ -182,28 +182,33 @@ public class ChatGptServiceImpl implements ChatGptService {
             SearchResult result = query.getResult();
             // Create the QueryBuilder query using PredicateGroup
 
-            // Process the result
-            for (Hit hit : result.getHits()) {
-                String hitPath = hit.getPath();
-                Resource hitResource = resourceResolver.getResource(hitPath);
+            if (result != null) {
 
-                // Access the properties
-                ValueMap propertiesMap = hitResource.adaptTo(ValueMap.class);
-                Map<String, Object> propertyValues = new HashMap<>();
+                // Process the result
+                for (Hit hit : result.getHits()) {
+                    String hitPath = hit.getPath();
+                    Resource hitResource = resourceResolver.getResource(hitPath);
 
-                for (String property : properties) {
-                    Object value = propertiesMap.get(property);
-                    if (value != null && value.toString() != "") {
-                        // other filters, filtering out actions for now, can be refactored to osgi configured later
-                        if (!hitPath.contains("actions")) {
-                            returnMap.put(hitPath + "/" + property, value.toString());
+                    // Access the properties
+                    ValueMap propertiesMap = hitResource.adaptTo(ValueMap.class);
+                    Map<String, Object> propertyValues = new HashMap<>();
+
+                    for (String property : properties) {
+                        Object value = propertiesMap.get(property);
+                        if (value != null && value.toString() != "") {
+                            // other filters, filtering out actions for now, can be refactored to osgi configured later
+                            if (!hitPath.contains("actions")) {
+                                returnMap.put(hitPath + "/" + property, value.toString());
+                            }
                         }
                     }
                 }
             }
 
             // Close the session and resource resolver
-            session.logout();
+            if (session != null) {
+                session.logout();
+            }
             resourceResolver.close();
 
 
