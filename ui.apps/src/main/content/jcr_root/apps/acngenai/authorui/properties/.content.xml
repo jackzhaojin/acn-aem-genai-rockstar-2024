@@ -8,7 +8,7 @@
                 cq:showOnCreate="{Boolean}false"
                 granite:class="gpt-tab"
                 jcr:primaryType="nt:unstructured"
-                jcr:title="GPT 3.5"
+                jcr:title="AI Personalization"
                 maximized="{Boolean}true"
                 sling:resourceType="granite/ui/components/coral/foundation/container">
                     <items jcr:primaryType="nt:unstructured">

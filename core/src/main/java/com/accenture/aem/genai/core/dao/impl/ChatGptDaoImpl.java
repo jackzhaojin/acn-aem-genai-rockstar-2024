@@ -37,7 +37,7 @@ public class ChatGptDaoImpl implements ChatGptDao {
     private static final String DEFAULT_SECRET_KEY_ENCRYPTED = "{61ca95838ad0b2e443a290633d040401a3862d526d43a2d74491e92afea9ce3bc46119e062af9c0d4ba1a0c42127966074e96a305e33f75f0391f5b3c280fbf1c480aae0ebd8d15a36b6a3cf51d1a6a9}";
 
     private static final String DEFAULT_CHAT_GPT_MODEL = "gpt-4"; // working chat
-    private static final String DEFAULT_MAX_TOKENS = "1000";
+    private static final String DEFAULT_MAX_TOKENS = "5000";
 
 
     //    private static final String API_ENDPOINT = "https://api.openai.com/v1/completions";

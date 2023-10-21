@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.accenture.aem.genai</groupId>
         <artifactId>acngenai</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -64,19 +64,19 @@
                             <groupId>com.accenture.aem.genai</groupId>
                             <artifactId>acngenai.core</artifactId>
                             <target>/apps/acngenai-packages/application/install</target>
-                        </embedded>
+                        </embedded><!--Not needed
                         <embedded>
                             <groupId>com.accenture.aem.genai</groupId>
                             <artifactId>acngenai.ui.content</artifactId>
                             <type>zip</type>
                             <target>/apps/acngenai-packages/content/install</target>
-                        </embedded>
+                        </embedded>--><!--Not needed
                         <embedded>
                             <groupId>com.accenture.aem.genai</groupId>
                             <artifactId>acngenai.ui.config</artifactId>
                             <type>zip</type>
                             <target>/apps/acngenai-packages/application/install</target>
-                        </embedded>
+                        </embedded>-->
                     </embeddeds>
                 </configuration>
             </plugin>
@@ -183,19 +183,19 @@
             <artifactId>acngenai.ui.apps</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
-        </dependency>
+        </dependency><!-- Not needed
         <dependency>
             <groupId>com.accenture.aem.genai</groupId>
             <artifactId>acngenai.ui.content</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
-        </dependency>
+        </dependency>--><!-- Not needed
         <dependency>
             <groupId>com.accenture.aem.genai</groupId>
             <artifactId>acngenai.ui.config</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 </project>

@@ -23,7 +23,7 @@ The main parts of the template are:
 * core: Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
 * it.tests: Java based integration tests
 * ui.apps: contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, and templates
-* ui.content: contains sample content using the components from the ui.apps
+* ui.content: REMOVED IN Accelerator - NOT NEEDED contains sample content using the components from the ui.apps
 * ui.config: contains runmode specific OSGi configs for the project
 * ui.frontend: an optional dedicated front-end build mechanism (Angular, React or general Webpack project)
 * ui.tests: Selenium based UI tests
