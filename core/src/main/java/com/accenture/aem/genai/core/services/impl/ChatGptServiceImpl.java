@@ -148,7 +148,7 @@ public class ChatGptServiceImpl implements ChatGptService {
                 .append("Below I will provide my personalization \"Prompt\" and the \"Content to be Personalized\" that needs to be personalized. \n")
                 .append("\nIf my \"Content to be Personalized\" in this chat has HTML markup, please respond with the same HTML markup structure. For example, if <p> exist in the prompt, keep the <p> in the response.")
                 .append("\nAlso please do not add quotes or any rational around the response, only respond back with personalized content! Also please keep the response around the same length as the Content to be Personalized.")
-                .append("\nPrompt: " + prompt)
+                .append("\nPrompt: " + prompt + ", please keep the content shorter")
                 .append("\nContent to be Personalized: " + content);
         return sb.toString();
     }
