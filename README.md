@@ -10,7 +10,7 @@ This can be introduced in a dev ops process later to increment with snapshot, an
 For now this process is simply executing the following
 
 ```
-mvn versions:set -DnewVersion=1.0.1
+mvn versions:set -DnewVersion=1.1.1
 mvn versions:commit
 
 ```
