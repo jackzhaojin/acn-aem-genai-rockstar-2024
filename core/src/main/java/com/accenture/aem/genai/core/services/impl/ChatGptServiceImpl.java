@@ -235,4 +235,14 @@ public class ChatGptServiceImpl implements ChatGptService {
         }
     }
 
+    @Override
+    public String getPageSummary(String prompt, String path, ResourceResolver resourceResolver) {
+        // in aem, we'll need to get page content from path
+
+        // then we'll need to send it over to chat gpt with the prompt
+
+        // response needs to be parsed and returned
+
+        return null;
+    }
 }

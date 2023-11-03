@@ -22,4 +22,6 @@ public interface ChatGptService {
      * @return
      */
     Map<String, String> useGptConvertStrings(String authorPrompt, Map<String, String> exfragOriginalContent, String chatSessionId);
+
+    String getPageSummary(String prompt, String path, ResourceResolver resourceResolver);
 }
