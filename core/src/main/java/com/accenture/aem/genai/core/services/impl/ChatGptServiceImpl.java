@@ -206,10 +206,10 @@ public class ChatGptServiceImpl implements ChatGptService {
             }
 
             // Close the session and resource resolver
-            if (session != null) {
+            /*if (session != null) {
                 session.logout();
             }
-            resourceResolver.close();
+            resourceResolver.close();*/
 
 
         } catch (Exception e) {
