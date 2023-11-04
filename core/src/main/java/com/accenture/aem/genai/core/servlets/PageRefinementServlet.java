@@ -55,7 +55,7 @@ public class PageRefinementServlet extends SlingSafeMethodsServlet {
         ResourceResolver resourceResolver = req.getResourceResolver();
 
 
-        String exfragOriginalContent = chatGptService.getPageSummary(prompt, req.getResource().getPath(), req.getResourceResolver());
+        String exfragOriginalContent = chatGptService.getPageSummary(prompt, req.getResource().getPath(), req.getResourceResolver(), req);
         JsonElement jsonOriginalTree = gson.toJsonTree(exfragOriginalContent);
 
         resp.getWriter().write(jsonOriginalTree.toString());

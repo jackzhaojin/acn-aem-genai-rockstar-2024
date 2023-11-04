@@ -2,28 +2,42 @@ package com.accenture.aem.genai.core.services.impl;
 
 import com.accenture.aem.genai.core.dao.ChatGptDao;
 import com.accenture.aem.genai.core.services.ChatGptService;
+import com.day.cq.contentsync.handler.util.RequestResponseFactory;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
+import com.day.cq.wcm.api.WCMMode;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.engine.SlingRequestProcessor;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+
 import javax.jcr.Session;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Component(service = ChatGptService.class, immediate = true)
 public class ChatGptServiceImpl implements ChatGptService {
@@ -40,6 +54,13 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
+
+    @Reference
+    SlingRequestProcessor slingRequestProcessor;
+
+
+    @Reference
+    private RequestResponseFactory requestResponseFactory;
 
     public static final String ROLE = "role";
     public static final String CONTENT = "content";
@@ -87,7 +108,7 @@ public class ChatGptServiceImpl implements ChatGptService {
                 message.addProperty(ROLE, "user");
                 message.addProperty(CONTENT, " \n" +
 //                        "Please do not change the content structure between the prompt and the response.\n" +
-                getChatGptMessageFromContent(authorPrompt, exfragOriginalContent.get(exfragContentPath)));
+                getPersonalizedContent(authorPrompt, exfragOriginalContent.get(exfragContentPath)));
             } else {
                 message = new JsonObject();
                 message.addProperty(ROLE, "user");
@@ -137,7 +158,7 @@ public class ChatGptServiceImpl implements ChatGptService {
         return chatGptResponse;
     }
 
-    private static String getChatGptMessageFromContent(String prompt, String content) {
+    private static String getPersonalizedContent(String prompt, String content) {
 
 //        return prompt + "In the text below. Please preserve all HTML markup if there are any. " +
 //                "Please Do not convert to bullet form unless the original message was in bullet \n" + content;
@@ -151,6 +172,25 @@ public class ChatGptServiceImpl implements ChatGptService {
                 .append("\nPrompt: " + prompt + ", please keep the content shorter")
                 .append("\nContent to be Personalized: " + content);
         return sb.toString();
+    }
+    private static String getContentSummary(String prompt, String content) {
+
+        if ("title".equals(prompt)) {
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("I am trying to summarize the page content to a SEO friendly page title. " +
+                            "Please do not respond back with any double quotes or numbers")
+                    .append("\nContent to be Summarized in JSON key value pair: " + content);
+            return sb.toString();
+        } else if ("description".equals(prompt)) {
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("I am trying to summarize the page content to a SEO friendly page description. " +
+                            "Please do not respond back with any double quotes or numbers")
+                    .append("\nContent to be Summarized in JSON key value pair: " + content);
+            return sb.toString();
+        }
+        return null;
     }
 
 
@@ -236,13 +276,65 @@ public class ChatGptServiceImpl implements ChatGptService {
     }
 
     @Override
-    public String getPageSummary(String prompt, String path, ResourceResolver resourceResolver) {
+    public String getPageSummary(String prompt, String path, ResourceResolver resourceResolver, SlingHttpServletRequest req) {
         // in aem, we'll need to get page content from path
+
+        logger.info("Generating Page Summary with prompt: " + prompt + " and path: " + path);
+        String pageContent = getPageContent(path, resourceResolver, req);
+        logger.debug("pageContent: " + pageContent);
 
         // then we'll need to send it over to chat gpt with the prompt
 
-        // response needs to be parsed and returned
+        JsonArray messageJsonArray = new JsonArray();
 
-        return null;
+
+        JsonObject message;
+        message = new JsonObject();
+        message.addProperty(ROLE, "system");
+        message.addProperty(CONTENT, "You are a helpful assistant for summarizing content");
+        messageJsonArray.add(message);
+
+        message = new JsonObject();
+        message.addProperty(ROLE, "user");
+        message.addProperty(CONTENT, " \n" +
+                getContentSummary(prompt, pageContent));
+        messageJsonArray.add(message);
+
+        String chatGptResponse = chatGptDao.generateResponseFromMessagesInString(messageJsonArray);
+
+        chatGptResponse = sanitizeResponse(chatGptResponse);
+
+        // response needs to be parsed and returned
+        return chatGptResponse;
+    }
+
+    public String getPageContent(String path, ResourceResolver resourceResolver, SlingHttpServletRequest req) {
+        // remove /jcr:content from path if it exists
+        /*if (path.endsWith("/jcr:content")) {
+            path = StringUtils.substringBeforeLast(path, "/jcr:content");
+        };
+        path = path + ".html";*/
+
+        path = path + ".-1.json";
+
+        HttpServletRequest pageReq = requestResponseFactory.createRequest("GET", path);
+        WCMMode.DISABLED.toRequest(req);
+
+        /* Setup response */
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        HttpServletResponse resp = requestResponseFactory.createResponse(out);
+
+        /* Process request through Sling */
+        try {
+            slingRequestProcessor.processRequest(pageReq, resp, resourceResolver);
+
+            String html = out.toString();
+            logger.debug("HTML: " + html);
+            return html;
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

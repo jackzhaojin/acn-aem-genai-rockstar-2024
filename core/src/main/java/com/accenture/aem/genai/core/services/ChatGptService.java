@@ -1,5 +1,6 @@
 package com.accenture.aem.genai.core.services;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
 
 import java.util.Map;
@@ -23,5 +24,5 @@ public interface ChatGptService {
      */
     Map<String, String> useGptConvertStrings(String authorPrompt, Map<String, String> exfragOriginalContent, String chatSessionId);
 
-    String getPageSummary(String prompt, String path, ResourceResolver resourceResolver);
+    String getPageSummary(String prompt, String path, ResourceResolver resourceResolver, SlingHttpServletRequest req);
 }
