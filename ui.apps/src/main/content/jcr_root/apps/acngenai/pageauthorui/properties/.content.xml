@@ -6,7 +6,7 @@
             cq:showOnCreate="{Boolean}false"
             granite:class="gpt-tab"
             jcr:primaryType="nt:unstructured"
-            jcr:title="AI Personalization"
+            jcr:title="AI Content Refinement"
             sling:resourceType="granite/ui/components/coral/foundation/container"
             maximized="{Boolean}true">
             <items jcr:primaryType="nt:unstructured">
@@ -17,23 +17,25 @@
                     <items jcr:primaryType="nt:unstructured">
                         <title
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Chat GPT"
+                            jcr:title="Chat GPT AI Content Refinement Console"
                             sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                             <items jcr:primaryType="nt:unstructured">
-                                <title
-                                    cq:showOnCreate="{Boolean}false"
-                                    granite:class="cpt-prompt-input"
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    fieldLabel="Chat Prompt"/>
-                                <continueChat
-                                    granite:class="cpt-continue-chat"
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                    fieldDescription="If checked we'll continue our previous chat. If unchecked we'll start a new chat"
-                                    name="./cq:xfShowInEditor"
-                                    text="Continue Chat"
-                                    value="false"/>
+                                <generateTitle
+                                        granite:class="cpt-generate-title"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Generate Title"
+                                        name="./generateTitle"
+                                        text="Generate Title"
+                                        value="true"/>
+                                <generateDescription
+                                        granite:class="cpt-generate-description"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Generate Description"
+                                        name="./generateDescription"
+                                        text="Generate Description"
+                                    value="true"/>
                                 <generate
                                     granite:class="cpt-generate-content"
                                     jcr:primaryType="nt:unstructured"
@@ -61,21 +63,15 @@
                                             jcr:title="New Content"/>
                                     </columns>
                                 </chatTable>
-                                <variationName
-                                    cq:showOnCreate="{Boolean}false"
-                                    granite:class="gpt-var-name"
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    fieldLabel="Variation Name"/>
-                                <create
-                                    granite:class="cpt-create-variation"
+                                <save
+                                    granite:class="cpt-save-content"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/button"
-                                    text="Create Variation">
+                                    text="Save Checked Content">
                                     <parentConfig
                                         jcr:primaryType="nt:unstructured"
                                         close="{Boolean}true"/>
-                                </create>
+                                </save>
                                 <charset
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/hidden"

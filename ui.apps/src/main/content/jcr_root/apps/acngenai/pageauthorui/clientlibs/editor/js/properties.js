@@ -44,7 +44,7 @@
             // Create the table header
             var $thead = $("<thead>");
             var $headerRow = $("<tr>");
-            var headers = ["Path", "Original Value", "Generated Value"];
+            var headers = ["Value", "Generated Value"];
 
             // Add the headers to the header row
             headers.forEach(function (headerText) {
@@ -86,42 +86,85 @@
 
 
         $(".cpt-generate-content").on("click", function () {
-            var promptValue = $(".cpt-prompt-input").val();
 
-            // Make the RESTful API call
-            var requestData = {
-                prompt: promptValue
-            };
-            // if continue chat is checked, add id
-            if ($('.cpt-continue-chat input').is(':checked')) {
-                requestData['id'] = chatId;
-            }
-            $.ajax({
-                url: getProomptUrl(),
-                method: "GET",
-                data: requestData,
-                success: function (response) {
-                    // Handle the API response
-                    console.log(response);
-                    if (response.displayTableData) {
-                        let displayTableData = response.displayTableData;
-                        generateTableFromJSON(displayTableData);
-                        latestResponse = displayTableData;
-                        chatId = response.generatedValues.id;
-                    }
+            let titlePending = false;
+            let descriptionPending = false;
+
+
+
+            // Function to enable the button when both calls are successful
+            function enableButtonIfBothCallsSucceeded() {
+                if (!titlePending && !descriptionPending) {
                     $(".cpt-generate-content").prop("disabled", false);
                     $(".cpt-generate-content").text("Generate Content (previous generation successful");
-
-                },
-                error: function (xhr, status, error) {
-                    // Handle the error
-                    console.error(error);
-                    $(".cpt-generate-content").prop("disabled", false);
-                    $(".cpt-generate-content").text("Generate Content (previous generation failed");
                 }
-            });
-            $(".cpt-generate-content").prop("disabled", true); // Disable the button
-            $(".cpt-generate-content").text("Processing"); // Change the button text
+            }
+            function getPromptValue(promptValue) {
+                var requestData = {
+                    prompt: promptValue
+                };
+                $.ajax({
+                    url: getProomptUrl(),
+                    method: "GET",
+                    data: requestData,
+                    success: function (response) {
+                        // Handle the API response
+                        console.log(response);
+                        if (response) {
+                            if (promptValue == 'title') {
+                                titlePending = false;
+                                if ($('.cpt-title-output').length === 0) {
+                                    // Create the .cpt-title-output div
+                                    var titleOutputDiv = $('<div class="cpt-title-output"></div>');
+                                    $('.cpt-generate-content').after(titleOutputDiv);
+
+                                    // Output the string inside the .cpt-title-output div
+                                    var title = response; // Replace with your actual title
+                                    $('.cpt-title-output').text('Title: ' + title);
+                                }
+                            }
+                            if (promptValue == 'description') {
+                                descriptionPending = false;
+                                if ($('.cpt-description-output').length === 0) {
+                                    // Create the .cpt-title-output div
+                                    var descriptionOutputDiv = $('<div class="cpt-description-output"></div>');
+                                    $('.cpt-generate-content').after(descriptionOutputDiv);
+
+                                    // Output the string inside the .cpt-title-output div
+                                    var description = response; // Replace with your actual title
+                                    $('.cpt-description-output').text('Description: ' + description);
+                                }
+                            }
+                            enableButtonIfBothCallsSucceeded();
+                        }
+
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error
+                        console.error(error);
+                        $(".cpt-generate-content").prop("disabled", false);
+                        $(".cpt-generate-content").text("Generate Content (previous generation failed");
+                    }
+                });
+                return requestData;
+            }
+
+            // if continue chat is checked, add id
+            if ($('.cpt-generate-title input').is(':checked')) {
+                titlePending = true;
+                var requestDataTitle = getPromptValue('title');
+
+                $(".cpt-generate-content").prop("disabled", true); // Disable the button
+                $(".cpt-generate-content").text("Processing"); // Change the button text
+            }
+            // if continue chat is checked, add id
+            if ($('.cpt-generate-description input').is(':checked')) {
+                descriptionPending = true;
+                var requestDataDescription = getPromptValue('description');
+
+                $(".cpt-generate-content").prop("disabled", true); // Disable the button
+                $(".cpt-generate-content").text("Processing"); // Change the button text
+            }
         });
 
     }
