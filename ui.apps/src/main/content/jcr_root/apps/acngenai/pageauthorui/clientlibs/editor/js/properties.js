@@ -115,26 +115,29 @@
                                 titlePending = false;
                                 if ($('.cpt-title-output').length === 0) {
                                     // Create the .cpt-title-output div
-                                    var titleOutputDiv = $('<div class="cpt-title-output"></div>');
-                                    $('.cpt-generate-content').after(titleOutputDiv);
+                                    var titleOutputTr = $('<tr class="cpt-title-output _coral-Table-row" is="coral-table-row"></tr>');
+                                    $('.cpt-chat-table tbody tr').first().after(titleOutputTr);
 
-                                    // Output the string inside the .cpt-title-output div
-                                    var title = response; // Replace with your actual title
-                                    $('.cpt-title-output').text('Title: ' + title);
                                 }
+                                // Output the string inside the .cpt-title-output div
+                                var title = response; // Replace with your actual title
+                                $('.cpt-title-output').html('<td is="coral-table-cell" class="_coral-Table-cell">Title</td><td is="coral-table-cell" class="_coral-Table-cell">' + title + '</td>');
+
                             }
                             if (promptValue == 'description') {
                                 descriptionPending = false;
                                 if ($('.cpt-description-output').length === 0) {
-                                    // Create the .cpt-title-output div
-                                    var descriptionOutputDiv = $('<div class="cpt-description-output"></div>');
-                                    $('.cpt-generate-content').after(descriptionOutputDiv);
+                                    // Create the .cpt-description-output div
+                                    var descriptionOutputTr = $('<tr class="cpt-description-output _coral-Table-row" is="coral-table-row"></tr>');
+                                    $('.cpt-chat-table tbody tr').first().after(descriptionOutputTr);
 
-                                    // Output the string inside the .cpt-title-output div
-                                    var description = response; // Replace with your actual title
-                                    $('.cpt-description-output').text('Description: ' + description);
                                 }
+                                // Output the string inside the .cpt-description-output div
+                                var description = response; // Replace with your actual description
+                                $('.cpt-description-output').html('<td is="coral-table-cell" class="_coral-Table-cell">Description</td><td is="coral-table-cell" class="_coral-Table-cell">' + description + '</td>');
                             }
+
+                            $("td:contains('There is no item.')").closest("tr").remove();
                             enableButtonIfBothCallsSucceeded();
                         }
 

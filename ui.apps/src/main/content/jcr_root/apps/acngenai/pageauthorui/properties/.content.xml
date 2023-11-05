@@ -55,9 +55,6 @@
                                         <contentProperty
                                             jcr:primaryType="nt:unstructured"
                                             jcr:title="Content Property"/>
-                                        <existingContent
-                                            jcr:primaryType="nt:unstructured"
-                                            jcr:title="Existing Content"/>
                                         <newContent
                                             jcr:primaryType="nt:unstructured"
                                             jcr:title="New Content"/>
