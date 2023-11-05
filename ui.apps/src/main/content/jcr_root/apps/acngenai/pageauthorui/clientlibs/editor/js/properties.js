@@ -96,6 +96,7 @@
             function enableButtonIfBothCallsSucceeded() {
                 if (!titlePending && !descriptionPending) {
                     $(".cpt-generate-content").prop("disabled", false);
+                    $(".cpt-save-content").prop("disabled", false);
                     $(".cpt-generate-content").text("Generate Content (previous generation successful");
                 }
             }
@@ -146,6 +147,7 @@
                         // Handle the error
                         console.error(error);
                         $(".cpt-generate-content").prop("disabled", false);
+                        $(".cpt-save-content").prop("disabled", false);
                         $(".cpt-generate-content").text("Generate Content (previous generation failed");
                     }
                 });
@@ -158,6 +160,7 @@
                 var requestDataTitle = getPromptValue('title');
 
                 $(".cpt-generate-content").prop("disabled", true); // Disable the button
+                $(".cpt-save-content").prop("disabled", true); // Disable the button
                 $(".cpt-generate-content").text("Processing"); // Change the button text
             }
             // if continue chat is checked, add id
@@ -166,6 +169,7 @@
                 var requestDataDescription = getPromptValue('description');
 
                 $(".cpt-generate-content").prop("disabled", true); // Disable the button
+                $(".cpt-save-content").prop("disabled", true); // Disable the button
                 $(".cpt-generate-content").text("Processing"); // Change the button text
             }
         });
@@ -246,10 +250,12 @@
                 data: formData,
                 success: function(response) {
                     // Handle the response
+                    $('.cpt-save-content').text("Save Checked Content (Previous save successful)");
                     console.log(response);
                 },
                 error: function(error) {
                     // Handle any errors
+                    $('.cpt-save-content').text("Save Checked Content (Previous save failed)");
                     console.error(error);
                 }
             });
