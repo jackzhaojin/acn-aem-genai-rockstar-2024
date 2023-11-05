@@ -4,7 +4,7 @@
     var init = false;
 
     var latestResponse = {};
-    var currentExfragVar = "";
+    var currentPagePath = "";
     var chatId = null;
 
     function bindGenerateContentButtonToPrompt() {
@@ -18,12 +18,12 @@
             var itemValue = parsedUrl.searchParams.get("item");
 
 // Remove the ".html" extension from the path
-            var pathWithoutExtension = parsedUrl.pathname.replace(".html", "");
+            let pathWithoutExtension = parsedUrl.pathname.replace(".html", "");
 
 // Remove unwanted segment from the path
             var finalPath = pathWithoutExtension.replace("/mnt/overlay/wcm/core/content/sites/properties", "");
 
-            currentExfragVar = itemValue;
+            currentPagePath = itemValue;
 // Combine the path, item value, and desired suffix
             finalPath += itemValue + "/jcr:content.aipreview.json";
 
@@ -172,7 +172,7 @@
 
     }
 
-    function bindCreateExfragButton() {
+    function saveCheckedContent() {
         function stripLastSegment(path) {
             var lastIndex = path.lastIndexOf("/");
             if (lastIndex !== -1) {
@@ -204,101 +204,55 @@
             return null;
         }
 
-        /**
-         * Used to convert name to friendly looking jcr title
-         * @param str name of the string
-         * @returns {string} title case
-         */
-        function convertToTitleCase(str) {
-            // Split the string into an array of words
-            var words = str.split('-');
 
-            // Capitalize the first letter of each word and convert the rest to lowercase
-            var titleCaseWords = words.map(function(word) {
-                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-            });
+        $(".cpt-save-content").click(function () {
 
-            // Join the words back into a string with spaces between them
-            var titleCaseStr = titleCaseWords.join(' ');
-
-            return titleCaseStr;
-        }
-
-        $(".cpt-create-variation").click(function () {
-            // Get the destination name from the jQuery class value
-            var destName = $(".gpt-var-name").val();
-
-            // Create the payload object
-            var payload = {
-                _charset_: "UTF-8",
-                cmd: "copyPage",
-                srcPath: currentExfragVar,
-                destParentPath: stripLastSegment(currentExfragVar),
-                before: "",
-                destName: destName,
-                shallow: false
+            var updatePropertyMap = {
             };
 
-            // Convert the payload object to x-www-form-urlencoded format
-            var formData = $.param(payload);
+            if ($('.cpt-generate-title input').is(':checked')) {
+                updatePropertyMap['jcr:title'] = $('.cpt-title-output td:last-child').text();
+            }
+            if ($('.cpt-generate-description input').is(':checked')) {
+                updatePropertyMap['jcr:description'] = $('.cpt-description-output td:last-child').text();
+            }
 
-            // Make the POST request to /bin/wcmcommand
-            $.post("/bin/wcmcommand", formData, function (response) {
-                // Handle the response
-                let newExfragPath = parseHTMLResponse(response);
-                if (newExfragPath) {
-                    var newExfragPathWithEditor = "/editor.html" + newExfragPath + ".html"
-                    $(".cpt-create-variation").after('<p>Success!</p>' +
-                        '<p><a target="_blank" href="' + newExfragPathWithEditor+ '">Click here to see new exfrag</a></p>');
+            let formData = '';
+            let count = 0;
+            for (let jsonToUpdate in updatePropertyMap) {
+
+                let propertyKey = jsonToUpdate;
+                // propertyKey = propertyKey.slice(0, propertyKey.lastIndexOf("/")) + "@" + propertyKey.slice(propertyKey.lastIndexOf("/") + 1);
+                let generatedValue = updatePropertyMap[jsonToUpdate];
+                if (count !== 0) {
+                    formData += '&';
                 }
 
-                // vars: latestResponse, newExfragPath, currentExfragVar
-                // need to override content
-                var updatePropertyMap = {
-                };
+                // remove extra quotes from generated value
+                let cleanedValue = generatedValue.replace(/^"|"$/g, '');
 
-                var formData = '';
-                for (var jsonToUpdate in latestResponse) {
+                formData += propertyKey + '=' + cleanedValue;
+                count ++;
+            }
 
-                    var propertyKey = latestResponse[jsonToUpdate].path.replace(currentExfragVar, "");
-                    // propertyKey = propertyKey.slice(0, propertyKey.lastIndexOf("/")) + "@" + propertyKey.slice(propertyKey.lastIndexOf("/") + 1);
-                    let generatedValue = latestResponse[jsonToUpdate].generatedValue;
-                    updatePropertyMap[propertyKey] =  generatedValue;
-                    if (jsonToUpdate != 0) {
-                        formData += '&';
-                    }
+            // adding in jcr title to match exfrag var name
+            // var uiFriendlyTitle = convertToTitleCase(destName);
+            // formData += "&." + '/jcr:content/jcr:title' + '=' + uiFriendlyTitle;
+            // var formData = '';
 
-                    // remove extra quotes from generated value
-                    var cleanedValue = generatedValue.replace(/^"|"$/g, '');
-
-                    formData += "." + propertyKey + '=' + cleanedValue;
-                }
-
-                // adding in jcr title to match exfrag var name
-                var uiFriendlyTitle = convertToTitleCase(destName);
-                formData += "&." + '/jcr:content/jcr:title' + '=' + uiFriendlyTitle;
-                // var formData = '';
-
-                $.ajax({
-                    url: newExfragPath,
-                    method: "POST",
-                    data: formData,
-                    success: function(response) {
-                        // Handle the response
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        // Handle any errors
-                        console.error(error);
-                    }
-                });
-
-                console.log("POST request success:", response);
-            })
-                .fail(function (error) {
+            $.ajax({
+                url: currentPagePath + "/jcr:content",
+                method: "POST",
+                data: formData,
+                success: function(response) {
+                    // Handle the response
+                    console.log(response);
+                },
+                error: function(error) {
                     // Handle any errors
-                    console.error("POST request failed:", error);
-                });
+                    console.error(error);
+                }
+            });
         });
     }
 
@@ -309,7 +263,7 @@
         init = true;
         bindGenerateContentButtonToPrompt();
 
-        bindCreateExfragButton();
+        saveCheckedContent();
 
     });
 })(window, document, Granite, Granite.$);
