@@ -97,7 +97,7 @@
                                                 <version
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/text"
-                                                        text="Version: 1.1.2"/>
+                                                        text="Version: 1.2.0"/>
                                             </items>
                                             <parentConfig
                                                 jcr:primaryType="nt:unstructured"
