@@ -6,6 +6,7 @@
 docker*/*.jar
 docker*/*.zip
 docker*/*.tar
+docker*/crx-quickstart
 docker*/installs
 
 ### Eclipse ###
